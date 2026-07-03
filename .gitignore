@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local design reference (large PDFs/exports — keep out of git)
+/design-reference/
+/mobile-header.png
