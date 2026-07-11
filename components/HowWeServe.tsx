@@ -33,7 +33,7 @@ export default function HowWeServe() {
         </div>
       </Container>
 
-      {/* Asymmetric image pair: large tray (left-bleed, 58.75%) + small plate (bottom-right, 18.5%) */}
+      {/* Asymmetric image pair: large tray (left-bleed, 58.75%) + small plate (bottom-right, 22.9%) */}
       <div className="relative mt-[clamp(2.5rem,6vw,6rem)]">
         <div className="w-full md:w-[58.75%]">
           <Reveal className="w-full">
@@ -47,14 +47,14 @@ export default function HowWeServe() {
             />
           </Reveal>
         </div>
-        <div className="mt-8 w-[56%] px-[var(--gutter)] md:absolute md:bottom-0 md:right-[8.4%] md:mt-0 md:w-[18.5%] md:px-0">
+        <div className="mt-8 w-[56%] px-[var(--gutter)] md:absolute md:bottom-0 md:right-[7.45%] md:mt-0 md:w-[22.9%] md:px-0">
           <Reveal className="w-full" delay={140}>
             <Image
-              src="/images/serve-plate.jpg"
-              alt="A dark wooden bowl of jewelled tabbouleh studded with pomegranate seeds."
-              width={355}
-              height={476}
-              sizes="(max-width: 768px) 56vw, 18.5vw"
+              src="/images/serve-dessert.jpg"
+              alt="Pistachio-crusted cream rolls on a bright yellow flower-shaped plate, drizzled with honey syrup over dark wood."
+              width={1541}
+              height={1970}
+              sizes="(max-width: 768px) 56vw, 23vw"
               className="h-auto w-full object-cover"
             />
           </Reveal>

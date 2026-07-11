@@ -2,9 +2,10 @@ import Image from "next/image";
 import Reveal from "@/components/ui/Reveal";
 
 /**
- * Our Philosophy — left-bleed image (_Q3A1950, ~44%), heading + body on the right.
- * Design @1920: image left:2 w:840 h:599; "Our Philosophy" heading + body left:1011 w:633.
+ * Our Philosophy — left-bleed image (~44%) + heading/body on the right, then a wide
+ * plated-dish band (_Q3A2026 1, Figma node 3:1642) right-bleed below the row.
  * Column split at x842 → 842fr / 1078fr, text inset ~169px into the right track.
+ * Design @1920 band: left:317 w:1601 (right-bleed, ~83.4% width).
  */
 export default function Philosophy() {
   return (
@@ -15,8 +16,8 @@ export default function Philosophy() {
       <div className="md:order-1">
         <Reveal className="w-full">
           <Image
-            src="/images/philosophy.jpg"
-            alt="A single cream-topped canapé garnished with an olive and spices, balanced on a stainless-steel cake server against a soft cream backdrop."
+            src="/images/tailored-tray.jpg"
+            alt="Two pairs of hands lifting savoury tartlets from a scalloped metal tray on a dark wooden table."
             width={840}
             height={599}
             sizes="(max-width: 768px) 100vw, 44vw"
@@ -35,6 +36,24 @@ export default function Philosophy() {
             heritage and contemporary fine dining. All of our dishes are made with
             zero premade components, prepared fresh on the day of your event.
           </p>
+        </div>
+      </div>
+
+      {/* _Q3A2026 1 (Figma 3:1642) — wide plated-dish band under the row, right-bleed
+          at ~83.4% width to match the design. Spans both columns on its own row, with
+          extra top margin so it sits clearly below the image/text row above it. */}
+      <div className="mt-[clamp(2rem,5vw,5rem)] md:order-3 md:col-span-2">
+        <div className="w-full md:ml-auto md:w-[83.4%]">
+          <Reveal className="w-full">
+            <Image
+              src="/images/plated-dish.jpg"
+              alt="A plated main course on a red-rimmed cream plate — seared beef medallions with a prawn, a mound of saffron rice topped with crispy leek, and a smear of pink sauce — set on a linen tablecloth."
+              width={1601}
+              height={1049}
+              sizes="(max-width: 768px) 100vw, 83vw"
+              className="h-auto w-full object-cover"
+            />
+          </Reveal>
         </div>
       </div>
     </section>
