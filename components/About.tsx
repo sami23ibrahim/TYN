@@ -6,7 +6,7 @@ import Reveal from "@/components/ui/Reveal";
  * pushed to the BOTTOM-left, and the right-bleed spoons image. The spoons image and the
  * portrait share the same bottom line (design: spoons bottom 4346, portrait bottom 4349),
  * so the left column is a full-height flex column (text top, portrait mt-auto) and the
- * spoons image bottom-aligns (self-end). Caption hangs below the portrait.
+ * spoons image bottom-aligns (self-end).
  *
  * Design @1920: heading/body left:108 (body w586); portrait left:105 w:403 h:543;
  * spoons right-bleed left:842 w:1077 h:1395. Column split at x842 → 842fr / 1078fr.
@@ -40,7 +40,7 @@ export default function About() {
         </div>
 
         {/* Portrait: mt-auto drops it to the column bottom (desktop) so its bottom edge
-            meets the spoons image bottom. Caption hangs below it. */}
+            meets the spoons image bottom. */}
         <figure className="relative mt-[clamp(2rem,4vw,3.5rem)] max-w-[403px] md:mt-auto">
           <Reveal className="w-full">
             <Image
@@ -52,9 +52,6 @@ export default function About() {
               className="h-auto w-full object-cover"
             />
           </Reveal>
-          <figcaption className="mt-3 text-body text-wine md:absolute md:inset-x-0 md:top-full">
-            Sam Darwish
-          </figcaption>
         </figure>
       </div>
 
