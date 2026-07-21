@@ -54,9 +54,14 @@
   --text-body--line-height: 1.4;
   --text-body--font-weight: 400;
 
-  /* Nav links — 36px, LH ~1 */
-  --text-nav: clamp(1.0625rem, 1.875vw, 2.25rem);
-  --text-nav--line-height: 1;
+  /* Nav links — 30px, LH 0.98.
+     KNOWN, DELIBERATE DIVERGENCE FROM FIGMA: the designers' revision sets 24px, but
+     24px read as too small in-browser, so this sits midway between the original 36px
+     and their 24px (client call, Jul 2026). Don't "fix" it back to 24px from Figma.
+     Also don't measure nav gaps off Figma: those text boxes are still 36px-era fixed
+     sizes — only the font size was changed there. */
+  --text-nav: clamp(1.0625rem, 1.5625vw, 1.875rem);
+  --text-nav--line-height: 0.98;
 
   /* Button labels (Contact us / Our menu) — 40px */
   --text-btn: clamp(1.125rem, 2.0833vw, 2.5rem);
@@ -151,6 +156,39 @@
   }
 }
 
+/*
+  Text reveal — a quiet fade + short rise, used by <Reveal variant="text">. Same trigger
+  as the image reveal, deliberately NOT the same motion:
+    · a clip-path wipe reads as a curtain/typewriter on type, not "subtle";
+    · the image effect's scale(1.08) start puts glyphs on sub-pixel boundaries, so text
+      goes visibly soft mid-animation and snaps sharp at the end;
+    · 1.15s is languid on a photo but sluggish on something you're trying to read.
+  No overflow:hidden here either — it would clip descenders and focus rings.
+  Structure mirrors .reveal: hidden is a static state (no transition, applied off-screen),
+  the animation lives on the shown state so hidden→shown animates exactly once.
+*/
+.reveal-text[data-reveal="hidden"] {
+  opacity: 0;
+  transform: translateY(14px);
+  will-change: opacity, transform;
+}
+.reveal-text[data-reveal="shown"] {
+  opacity: 1;
+  transform: translateY(0);
+  animation: reveal-text-rise 720ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  animation-delay: var(--reveal-delay, 0ms);
+}
+@keyframes reveal-text-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reveal,
   .reveal[data-reveal] {
@@ -158,6 +196,12 @@
   }
   .reveal[data-reveal] > * {
     transform: none !important;
+  }
+  .reveal-text,
+  .reveal-text[data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
   }
 }
 

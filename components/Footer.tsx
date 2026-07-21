@@ -1,4 +1,5 @@
 import ContactForm from "@/components/ContactForm";
+import Reveal from "@/components/ui/Reveal";
 
 const linkCls = "underline-offset-4 hover:underline focus-visible:outline-cream";
 
@@ -22,34 +23,40 @@ export default function Footer() {
       <div className="grid gap-y-12 md:grid-cols-2 md:items-start md:gap-x-[clamp(2rem,4vw,5rem)]">
         {/* Left: heading (top) + contacts / copyright (bottom) */}
         <div className="flex flex-col">
-          <h2 className="text-h2">
-            Get in touch
-            <br />
-            with us.
-          </h2>
+          <Reveal variant="text">
+            <h2 className="text-h2">
+              Get in touch
+              <br />
+              with us.
+            </h2>
+          </Reveal>
 
-          <div className="mt-[clamp(2.5rem,7vw,11rem)]">
-            <p className="text-body">
-              <a href="mailto:info@tynkitchen.cz" className={linkCls}>
-                info@tynkitchen.cz
-              </a>
-            </p>
+          {/* Contact details animate; the form opposite deliberately does NOT — fading in
+              fields the user may already be reaching for reads as lag, not polish. */}
+          <Reveal variant="text" delay={90}>
+            <div className="mt-[clamp(2.5rem,7vw,11rem)]">
+              <p className="text-body">
+                <a href="mailto:info@tynkitchen.cz" className={linkCls}>
+                  info@tynkitchen.cz
+                </a>
+              </p>
 
-            <p className="mt-[clamp(1.5rem,2.5vw,2.75rem)] text-body">
-              <a
-                href="https://instagram.com/tynkitchen"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={linkCls}
-              >
-                ig @tynkitchen
-              </a>
-            </p>
+              <p className="mt-[clamp(1.5rem,2.5vw,2.75rem)] text-body">
+                <a
+                  href="https://instagram.com/tynkitchen"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={linkCls}
+                >
+                  ig @tynkitchen
+                </a>
+              </p>
 
-            <p className="mt-[clamp(1.5rem,2vw,2.5rem)] text-body">
-              Copyright Týn and Thyme catering s. r. o.
-            </p>
-          </div>
+              <p className="mt-[clamp(1.5rem,2vw,2.5rem)] text-body">
+                Copyright Týn and Thyme catering s. r. o.
+              </p>
+            </div>
+          </Reveal>
         </div>
 
         {/* Right: outlined box (Figma shows it empty; holds the contact form here) */}

@@ -21,8 +21,12 @@ export default function Header() {
       id="top"
       className="relative z-50 bg-cream px-[clamp(1.25rem,3.125vw,3.75rem)]"
     >
-      <div className="flex items-center justify-between py-[clamp(1.1rem,1.85vw,2.25rem)]">
-        {/* Logo — burgundy SVG, ~193×83 @1920 */}
+      {/* py 26px @1920 (was 36px) — header band tightened at client request */}
+      <div className="flex items-center justify-between py-[clamp(0.8rem,1.3542vw,1.625rem)]">
+        {/* Logo — burgundy SVG. The width/height attrs are the asset's true viewBox
+            (193×83) and describe the file, not the render; the clamp draws it 71px
+            tall @1920 per Figma node 3:1602, i.e. ~165×71. Reduced from 83px to
+            tighten the header band. */}
         <a href="#top" aria-label="TÝN — home" className="shrink-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -30,11 +34,11 @@ export default function Header() {
             alt="TÝN"
             width={193}
             height={83}
-            className="h-[clamp(2.5rem,4.32vw,5.1875rem)] w-auto"
+            className="h-[clamp(2.125rem,3.6979vw,4.4375rem)] w-auto"
           />
         </a>
 
-        {/* Desktop nav — 36px burgundy, ~100px gaps, right-aligned cluster */}
+        {/* Desktop nav — 30px burgundy, ~100px gaps, right-aligned cluster */}
         <nav aria-label="Primary" className="hidden md:block">
           <ul className="flex items-center gap-[clamp(1.5rem,5.2vw,6.25rem)]">
             {NAV.map((item) => (

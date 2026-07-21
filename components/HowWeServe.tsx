@@ -14,23 +14,27 @@ export default function HowWeServe() {
   return (
     <section id="how-we-serve" className="py-[clamp(3rem,7vw,7rem)] text-wine">
       <Container>
-        <h2 className="text-center text-h2 text-wine">How We Serve</h2>
+        <Reveal variant="text">
+          <h2 className="text-center text-h2 text-wine">How We Serve</h2>
+        </Reveal>
 
-        <div className="mt-[clamp(2rem,4vw,3.5rem)] grid gap-x-[clamp(2rem,5.4vw,6.5rem)] gap-y-10 md:grid-cols-2">
-          <ServiceItem title="The Convivial Buffet">
-            A generous spread laid out for guests to graze freely, dishes
-            replenished throughout the service. All items are presented in
-            communal serving vessels, encouraging the convivial spirit of a
-            Levantine table. Perfect for dynamic corporate events, launches, and
-            social gatherings.
-          </ServiceItem>
-          <ServiceItem title="The Mezze-Style Dinner">
-            A curated selection of dishes brought to the table in waves, designed
-            to be shared. The pace is unhurried, the portions generous, and the
-            intention is for guests to linger. Ideal for intimate private
-            dinners, celebrations, and formal sit-down gatherings.
-          </ServiceItem>
-        </div>
+        <Reveal variant="text" delay={90}>
+          <div className="mt-[clamp(2rem,4vw,3.5rem)] grid gap-x-[clamp(2rem,5.4vw,6.5rem)] gap-y-10 md:grid-cols-2">
+            <ServiceItem title="The Convivial Buffet">
+              A generous spread laid out for guests to graze freely, dishes
+              replenished throughout the service. All items are presented in
+              communal serving vessels, encouraging the convivial spirit of a
+              Levantine table. Perfect for dynamic corporate events, launches, and
+              social gatherings.
+            </ServiceItem>
+            <ServiceItem title="The Mezze-Style Dinner">
+              A curated selection of dishes brought to the table in waves, designed
+              to be shared. The pace is unhurried, the portions generous, and the
+              intention is for guests to linger. Ideal for intimate private
+              dinners, celebrations, and formal sit-down gatherings.
+            </ServiceItem>
+          </div>
+        </Reveal>
       </Container>
 
       {/* Asymmetric image pair: large tray (left-bleed, 58.75%) + small plate (bottom-right, 22.9%) */}
@@ -40,10 +44,16 @@ export default function HowWeServe() {
             <Image
               src="/images/serve-tray.jpg"
               alt="Guests reaching across a candlelit table laden with mezze — hummus, muhammara, stuffed vine leaves, falafel and saffron rice."
-              width={1128}
-              height={721}
+              width={1469}
+              height={939}
               sizes="(max-width: 768px) 100vw, 59vw"
-              className="h-auto w-full object-cover"
+              // Pre-cropped to the designer's framing: source region x1105 y869
+              // 1469×939 of the 4096×2731 original (kept in design-reference/originals/,
+              // gitignored — re-crop from there if the numbers need nudging).
+              // object-cover centre-crops, which could NOT reproduce a hand-placed
+              // Figma crop — hence baking it into the file. Ratio already matches
+              // Figma node 136:2; the aspect box stays as a guard against drift.
+              className="aspect-[1128/721] w-full object-cover"
             />
           </Reveal>
         </div>
@@ -63,7 +73,9 @@ export default function HowWeServe() {
 
       <div className="mt-[clamp(2.5rem,5vw,5rem)] flex justify-center">
         {/* // TODO: point at the real menu page/PDF when available */}
-        <Button href="#tailored">Our menu</Button>
+        <Reveal variant="text">
+          <Button href="#tailored">Our menu</Button>
+        </Reveal>
       </div>
     </section>
   );

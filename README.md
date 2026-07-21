@@ -26,7 +26,7 @@ char-count on the 1920px artboard (the design uses a deliberately compressed sca
 | `--color-wine` | `#7E283E` | footer |
 
 Type scale: `text-display` (~42px) · `text-h2` (~40px) · `text-h3` (~30px) · `text-body` (~21px) ·
-`text-nav` (~32px) · `text-btn` · `text-caption` — all fluid via `clamp()`.
+`text-nav` (30px) · `text-btn` · `text-caption` — all fluid via `clamp()`.
 
 ## ⚠️ Real assets you still need to supply
 

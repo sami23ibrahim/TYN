@@ -28,14 +28,18 @@ export default function Philosophy() {
 
       <div className="px-[var(--gutter)] md:order-2 md:pl-[clamp(2rem,8.8vw,10.5rem)] md:pr-[var(--gutter)]">
         <div className="max-w-[633px]">
-          <h2 className="text-h2 text-wine">Our Philosophy</h2>
-          <p className="mt-[clamp(1.5rem,3vw,2.5rem)] text-body text-wine">
-            We work with a small number of clients each season, giving each event
-            the full attention it deserves: seasonal ingredients, food prepared
-            from scratch, and a sensibility that sits at the intersection of
-            heritage and contemporary fine dining. All of our dishes are made with
-            zero premade components, prepared fresh on the day of your event.
-          </p>
+          <Reveal variant="text">
+            <h2 className="text-h2 text-wine">Our Philosophy</h2>
+          </Reveal>
+          <Reveal variant="text" delay={90}>
+            <p className="mt-[clamp(1.5rem,3vw,2.5rem)] text-body text-wine">
+              We work with a small number of clients each season, giving each event
+              the full attention it deserves: seasonal ingredients, food prepared
+              from scratch, and a sensibility that sits at the intersection of
+              heritage and contemporary fine dining. All of our dishes are made with
+              zero premade components, prepared fresh on the day of your event.
+            </p>
+          </Reveal>
         </div>
       </div>
 
@@ -51,7 +55,9 @@ export default function Philosophy() {
               width={1601}
               height={1049}
               sizes="(max-width: 768px) 100vw, 83vw"
-              className="h-auto w-full object-cover"
+              // File is the uncropped 4096×2731 original (1.500); design is 1.526.
+              // Lock to the Figma ratio (node 3:1642) so the crop actually applies.
+              className="aspect-[1601/1049] w-full object-cover"
             />
           </Reveal>
         </div>

@@ -15,23 +15,28 @@ export default function Intro() {
         {/* Track sizes encode the exact design widths: 669 H1 : 78 gap : 727 lede : 228 right space */}
         <div className="grid items-start gap-y-9 md:[grid-template-columns:669fr_78fr_727fr_228fr]">
           <div className="md:col-start-1">
-            <h1 className="text-display text-wine">
-              Premium catering crafted with
-              <br className="hidden md:block" />
-              a touch of Middle Eastern heritage.
-            </h1>
-            <Button href="#contact" className="mt-[clamp(1.75rem,3vw,2.75rem)]">
-              Contact us
-            </Button>
+            {/* H1 + its button move as one; the lede opposite follows 90ms later. */}
+            <Reveal variant="text">
+              <h1 className="text-display text-wine">
+                Premium catering crafted with
+                <br className="hidden md:block" />
+                a touch of Middle Eastern heritage.
+              </h1>
+              <Button href="#contact" className="mt-[clamp(1.75rem,3vw,2.75rem)]">
+                Contact us
+              </Button>
+            </Reveal>
           </div>
 
           <div className="md:col-start-3">
-            <p className="text-body text-wine">
-              Thoughtfully designed menus, seasonal ingredients, and memorable
-              experiences for weddings, private celebrations
-              <br className="hidden md:block" />
-              and corporate events.
-            </p>
+            <Reveal variant="text" delay={90}>
+              <p className="text-body text-wine">
+                Thoughtfully designed menus, seasonal ingredients, and memorable
+                experiences for weddings, private celebrations
+                <br className="hidden md:block" />
+                and corporate events.
+              </p>
+            </Reveal>
           </div>
         </div>
       </Container>

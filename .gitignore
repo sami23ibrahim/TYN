@@ -43,3 +43,9 @@ next-env.d.ts
 # local design reference (large PDFs/exports — keep out of git)
 /design-reference/
 /mobile-header.png
+
+# staging area for raw Figma exports — not yet wired into any component,
+# re-exportable from the Figma file. Keep the multi-MB originals out of history.
+/public/new images/
+/public/images/serve-plate-2.jpg
+/public/images/_Q3A*.png
