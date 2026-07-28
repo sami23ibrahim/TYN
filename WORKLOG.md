@@ -1,7 +1,151 @@
-# Worklog — designer feedback round 1
+# Worklog
 
-**Session: 2026-07-20.** Working through five points from the designers, one at a time.
+Newest session first.
+
+---
+
+# Session 2026-07-28 — client tweaks + contact form goes live
+
+Everything below is **committed and pushed** (`8c2e7bc`, `1343a47`). One external dependency is
+still outstanding: the DNS records that make email actually send.
+
+## Status
+
+| # | Item | Status |
+|---|---|---|
+| 1 | Nav type 25% smaller, header band shorter | **Done**, deployed |
+| 2 | "Premium" removed from the hero headline | **Done**, deployed |
+| 3 | Words fusing on mobile around hidden `<br>` | **Done** — was a JSX bug, found in 3 places |
+| 4 | Swipe the Tailored Concepts gallery on phones | **Done**, deployed |
+| 5 | Contact form sends email via Resend | **Code done and deployed**; blocked on DNS |
+
+---
+
+## 1. Header — smaller nav, shorter band
+
+- `--text-nav` 30px → **22.5px** @1920 (exactly −25% across the whole clamp range).
+- Header band **123px → 78px**. Most of that was the **logo (71 → 54px)**, not padding
+  (16 → 12px). The logo sets the band height; trimming padding alone barely moves it.
+
+Third revision of these numbers (see the 2026-07-20 session). The token comment in
+`globals.css` carries the history so nobody "restores" the Figma value.
+
+## 2. Hero copy
+
+"Premium catering crafted with…" → **"Catering crafted with…"** (`Intro.tsx`).
+
+The same sentence is still duplicated verbatim in the SEO metadata (`layout.tsx:19`), and the
+`<title>` still reads "TÝN — Premium Levantine Catering". Both left alone deliberately — neither
+is visible on the page. **Flagged to the user, no decision yet.**
+
+## 3. Mobile line breaks — a JSX bug, not CSS
+
+`components/TailoredConcepts.tsx` rendered "specific characterof your event" on phones.
+
+Cause: JSX strips the newline between a text line and a tag on the line below. With
+`<br className="hidden md:block" />` display-none at mobile widths, the two text runs became
+adjacent with no separator. Desktop was fine because the `<br>` supplied the break.
+
+Fixed with an explicit `{" "}` before each `<br>`. **The same latent bug existed in two more
+places** in `Intro.tsx` ("crafted witha touch", "celebrationsand corporate events") — also fixed.
+
+**If you add another `hidden md:block` `<br>`, put `{" "}` before it.** There is a comment saying so.
+
+## 4. Gallery swipe
+
+`HorizontalConcepts.tsx` now takes a swipe as well as the arrows:
+
+- Pointer events, so touch, pen and mouse-drag all use one code path.
+- The track follows the finger 1:1; easing is switched off mid-drag so it can't lag behind.
+- Commits past **15% of frame width (min 40px)**, otherwise springs back.
+- The gesture locks to an axis after an 8px slop, and the viewport is `touch-pan-y`, so
+  vertical page scrolling through the section is unaffected.
+
+Verified in a 390×844 touch browser: next/prev/wrap all correct, sub-threshold drag springs back,
+vertical swipe scrolls the page (5332 → 5517) without changing the slide.
+
+---
+
+## 5. Contact form → Resend
+
+Design doc: `docs/superpowers/specs/2026-07-28-contact-form-email-design.md`.
+
+Submitting now sends **two** emails: the enquiry to `info@tynkitchen.cz` (Reply-To set to the
+customer) and a confirmation to the customer promising a reply **within 48 hours**.
+
+| File | Job |
+|---|---|
+| `lib/enquiry.ts` | Fields, types, pure validator, shared state type. No I/O. |
+| `lib/emails.ts` | The two templates. No sending. |
+| `app/actions/enquiry.ts` | Server action: rate limit → honeypot → validate → send. |
+| `components/ContactForm.tsx` | `useActionState`, inline errors, pending/success UI. |
+
+**Send order is deliberate.** The notification to TÝN goes first because it is the email that must
+not be lost. If the customer confirmation fails afterwards, success is still reported — telling the
+customer to retry would only duplicate an enquiry you already have.
+
+**No `RESEND_API_KEY` → the action logs both emails to the console instead of sending**, but only in
+development. In production a missing key throws, so a misconfigured deploy fails loudly rather than
+silently dropping enquiries. This is what made the whole flow testable before DNS existed.
+
+Resend's REST API is called with `fetch` rather than the SDK — one POST does not justify a fourth
+runtime dependency in a project that has three.
+
+### Spam
+
+Honeypot `company` field (offscreen, `tabindex="-1"`, `aria-hidden`) — if filled, success is
+reported and **nothing is sent**; an error would just teach the bot to retry. Plus 3 submissions per
+IP per 10 minutes.
+
+**The rate limit is a speed bump, not a quota.** It lives in module memory and Vercel runs multiple
+instances. Upstash / Vercel KV is the upgrade if real spam arrives — not before.
+
+### Verified end to end (real browser, dev server)
+
+- Bad payload with native validation bypassed → 8 correct field errors, submitted values preserved.
+- Valid submission → both emails correct, diacritics intact (`Jana Nováková`, `TÝN`), Reply-To set.
+- Honeypot filled → success shown, **0 emails logged**.
+- `eslint`, `tsc --noEmit` and `next build` all clean.
+
+### Outstanding
+
+1. **DNS records are with a third party.** Sami has no GoDaddy access. Three records were sent:
+   `resend._domainkey` TXT (DKIM), `send` MX → `feedback-smtp.eu-west-1.amazonses.com` pri 10,
+   `send` TXT → `v=spf1 include:amazonses.com ~all`. Then click **verify** in Resend.
+2. **Until verified, submissions fail** with "email us directly at info@tynkitchen.cz". Shipped
+   anyway because the previous live behaviour was worse — it told real customers the form was
+   "a presentational placeholder" and dropped the enquiry silently.
+3. **Confirm `info@tynkitchen.cz` actually receives mail.** Resend only sends. If that mailbox does
+   not exist, enquiries will report success and vanish. Not yet verified.
+4. **Rotate the API key.** It was pasted into a chat transcript. Sending-only scope, so low risk,
+   but replace it once things work.
+
+---
+
+## Gotchas learned this session
+
+**A `"use server"` module may only export async functions.** `initialEnquiryState` had to move to
+`lib/enquiry.ts`; exporting the constant beside the action is a build error.
+
+**`.gitignore`'s `.env*` also swallows `.env.example`.** Needs an explicit `!.env.example`.
+
+**`h-full` does not resolve against a parent's `min-height`.** The footer box uses `md:min-h-[…]`,
+so the post-submit confirmation sat at the top instead of centred. Fixed by making the box
+`flex flex-col` and the children `flex-1` — no duplicated magic number.
+
+**Fixed the pre-existing `set-state-in-effect` lint error** in `ContactForm.tsx`. The date floor is
+now written to the DOM via a ref after mount. It cannot be server-rendered: the page is statically
+prerendered, so a server-computed `min` would freeze at build time.
+
+---
+
+# Session 2026-07-20 — designer feedback round 1
+
+Working through five points from the designers, one at a time.
 Nothing is committed or deployed yet — all of the below is local only. Live site is still `4a97427`.
+
+**Superseded since:** points 1 and 4 were revisited on 2026-07-28 (header numbers changed again);
+the `ContactForm.tsx` lint error noted under "Blockers" is now fixed.
 
 ---
 
@@ -149,8 +293,8 @@ desktop and mobile frames, so both hero slots read as empty.
 `rm -rf .next` + dev-server restart is required or you'll keep seeing the old image.
 Same applies to editing the `@theme` block in `globals.css` — this bit us twice today.
 
-**Pre-existing lint error**, untouched by this work: `ContactForm.tsx:40`, setState in an effect
-(from the hydration-safe date logic).
+~~**Pre-existing lint error**, untouched by this work: `ContactForm.tsx:40`, setState in an effect
+(from the hydration-safe date logic).~~ **Fixed 2026-07-28** — now a ref write after mount.
 
 ---
 
