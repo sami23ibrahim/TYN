@@ -60,7 +60,9 @@ export default function Footer() {
         </div>
 
         {/* Right: outlined box (Figma shows it empty; holds the contact form here) */}
-        <div className="rounded-[2px] border border-cream p-[clamp(1.5rem,3vw,2.5rem)] md:min-h-[clamp(20rem,30.6vw,36.75rem)]">
+        {/* flex-col so the form (and the post-submit confirmation) can stretch to the
+            box: a percentage height would not resolve against min-height. */}
+        <div className="flex flex-col rounded-[2px] border border-cream p-[clamp(1.5rem,3vw,2.5rem)] md:min-h-[clamp(20rem,30.6vw,36.75rem)]">
           <ContactForm />
         </div>
       </div>
