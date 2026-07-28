@@ -54,13 +54,13 @@
   --text-body--line-height: 1.4;
   --text-body--font-weight: 400;
 
-  /* Nav links — 30px, LH 0.98.
-     KNOWN, DELIBERATE DIVERGENCE FROM FIGMA: the designers' revision sets 24px, but
-     24px read as too small in-browser, so this sits midway between the original 36px
-     and their 24px (client call, Jul 2026). Don't "fix" it back to 24px from Figma.
+  /* Nav links — 22.5px, LH 0.98.
+     KNOWN, DELIBERATE DIVERGENCE FROM FIGMA: Figma says 24px; this was 30px (a
+     client call, Jul 2026, splitting the difference with the original 36px) and is
+     now 25% smaller again at client request. Don't "fix" it back to Figma's value.
      Also don't measure nav gaps off Figma: those text boxes are still 36px-era fixed
      sizes — only the font size was changed there. */
-  --text-nav: clamp(1.0625rem, 1.5625vw, 1.875rem);
+  --text-nav: clamp(0.796875rem, 1.1719vw, 1.40625rem);
   --text-nav--line-height: 0.98;
 
   /* Button labels (Contact us / Our menu) — 40px */

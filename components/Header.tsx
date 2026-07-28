@@ -21,12 +21,14 @@ export default function Header() {
       id="top"
       className="relative z-50 bg-cream px-[clamp(1.25rem,3.125vw,3.75rem)]"
     >
-      {/* py 26px @1920 (was 36px) — header band tightened at client request */}
-      <div className="flex items-center justify-between py-[clamp(0.8rem,1.3542vw,1.625rem)]">
+      {/* py 12px @1920 (was 16 ← 26 ← 36px) — header band tightened again at client
+          request to cut the white space above/below the nav */}
+      <div className="flex items-center justify-between py-[clamp(0.375rem,0.625vw,0.75rem)]">
         {/* Logo — burgundy SVG. The width/height attrs are the asset's true viewBox
-            (193×83) and describe the file, not the render; the clamp draws it 71px
-            tall @1920 per Figma node 3:1602, i.e. ~165×71. Reduced from 83px to
-            tighten the header band. */}
+            (193×83) and describe the file, not the render; the clamp draws it 54px
+            tall @1920, i.e. ~126×54. Figma node 3:1602 has it at 83px; it has been
+            stepped down (83 → 71 → 54) because the logo, not the padding, is what
+            sets the header band height. */}
         <a href="#top" aria-label="TÝN — home" className="shrink-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -34,7 +36,7 @@ export default function Header() {
             alt="TÝN"
             width={193}
             height={83}
-            className="h-[clamp(2.125rem,3.6979vw,4.4375rem)] w-auto"
+            className="h-[clamp(1.625rem,2.8125vw,3.375rem)] w-auto"
           />
         </a>
 

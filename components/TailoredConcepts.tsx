@@ -21,7 +21,9 @@ export default function TailoredConcepts() {
         </Reveal>
         <Reveal variant="text" delay={90}>
           <p className="mx-auto mt-[clamp(1.25rem,3.3vw,4rem)] max-w-[1119px] text-feature-body">
-            We design distinct menus tailored to honour the specific character
+            {/* The {" "} is load-bearing: JSX drops the newline before <br>, so on
+                mobile (where the <br> is hidden) the two lines would run together. */}
+            We design distinct menus tailored to honour the specific character{" "}
             <br className="hidden md:block" />
             of your event and reflect the true warmth of Levantine hospitality.
           </p>

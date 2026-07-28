@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Reveal from "@/components/ui/Reveal";
 
@@ -12,6 +12,9 @@ import Reveal from "@/components/ui/Reveal";
  *
  * Slide #1 is the original knafeh photo we kept; #2–#7 are the updated design's
  * images (public/images/tailored-2…7.png).
+ *
+ * On touch devices the frame is also swipeable: the track follows the finger and
+ * settles to the next/previous slide past a threshold (see the pointer handlers).
  *
  * Progressive/accessible:
  *   - prefers-reduced-motion → the slide change is instant (no transform easing).
@@ -98,6 +101,73 @@ export default function HorizontalConcepts() {
     );
   };
 
+  // ── Swipe ────────────────────────────────────────────────────────────────
+  // Pointer events, so touch and pen (and a mouse drag) all work with one path.
+  // The gesture stays undecided until it clears an 8px slop radius, then locks to
+  // an axis: horizontal drags the track, vertical is released back to the page so
+  // the section still scrolls normally (`touch-pan-y` on the viewport tells the
+  // browser the same thing, which is what keeps scrolling smooth on iOS).
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const gesture = useRef<{
+    id: number;
+    x: number;
+    y: number;
+    axis: "undecided" | "x" | "y";
+    width: number;
+  } | null>(null);
+  const [dragX, setDragX] = useState(0);
+  const [dragging, setDragging] = useState(false);
+
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    gesture.current = {
+      id: e.pointerId,
+      x: e.clientX,
+      y: e.clientY,
+      axis: "undecided",
+      width: viewportRef.current?.clientWidth || 1,
+    };
+  };
+
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const g = gesture.current;
+    if (!g || g.id !== e.pointerId) return;
+    const dx = e.clientX - g.x;
+    const dy = e.clientY - g.y;
+
+    if (g.axis === "undecided") {
+      if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+      g.axis = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
+      if (g.axis !== "x") return;
+      // Capture so the drag survives the finger leaving the frame.
+      e.currentTarget.setPointerCapture(e.pointerId);
+      setDragging(true);
+    }
+    if (g.axis !== "x") return;
+    setDragX(dx);
+  };
+
+  // Settle: past the threshold we advance, otherwise the track springs back. Both
+  // are the same animation — dragging goes false, so the transition is live again.
+  const onPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    const g = gesture.current;
+    if (!g || g.id !== e.pointerId) return;
+    gesture.current = null;
+    setDragging(false);
+    setDragX(0);
+    if (g.axis !== "x") return;
+    const dx = e.clientX - g.x;
+    const threshold = Math.max(40, g.width * 0.15);
+    if (dx <= -threshold) go(index + 1);
+    else if (dx >= threshold) go(index - 1);
+  };
+
+  const onPointerCancel = () => {
+    gesture.current = null;
+    setDragging(false);
+    setDragX(0);
+  };
+
   return (
     <Reveal className="w-full">
       <div
@@ -116,14 +186,23 @@ export default function HorizontalConcepts() {
         </button>
 
         {/* Viewport — clips to one slide; the track slides by whole frames. */}
-        <div className="relative aspect-[3/2] w-full max-w-[1040px] overflow-hidden rounded-[2px]">
+        <div
+          ref={viewportRef}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+          onPointerCancel={onPointerCancel}
+          className="relative aspect-[3/2] w-full max-w-[1040px] touch-pan-y overflow-hidden rounded-[2px] select-none"
+        >
           <div
             className="flex h-full"
             style={{
-              transform: `translate3d(-${index * 100}%, 0, 0)`,
-              transition: motionOK
-                ? "transform 600ms cubic-bezier(0.33, 0.4, 0.3, 1)"
-                : "none",
+              transform: `translate3d(calc(${-index * 100}% + ${dragX}px), 0, 0)`,
+              // No easing mid-drag — the track must track the finger 1:1.
+              transition:
+                motionOK && !dragging
+                  ? "transform 600ms cubic-bezier(0.33, 0.4, 0.3, 1)"
+                  : "none",
             }}
           >
             {IMAGES.map((img, i) => (
@@ -141,6 +220,8 @@ export default function HorizontalConcepts() {
                   fill
                   sizes="(max-width: 768px) 100vw, 80vw"
                   loading={eager.has(i) ? "eager" : "lazy"}
+                  // Without this a mouse drag grabs the image's native ghost instead.
+                  draggable={false}
                   className="object-cover"
                 />
               </div>

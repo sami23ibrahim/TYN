@@ -49,3 +49,5 @@ next-env.d.ts
 /public/new images/
 /public/images/serve-plate-2.jpg
 /public/images/_Q3A*.png
+
+.vercel

@@ -18,7 +18,9 @@ export default function Intro() {
             {/* H1 + its button move as one; the lede opposite follows 90ms later. */}
             <Reveal variant="text">
               <h1 className="text-display text-wine">
-                Premium catering crafted with
+                {/* {" "} is load-bearing — JSX drops the newline before <br>, so on
+                    mobile (<br> hidden) the lines would run together. */}
+                Catering crafted with{" "}
                 <br className="hidden md:block" />
                 a touch of Middle Eastern heritage.
               </h1>
@@ -32,7 +34,7 @@ export default function Intro() {
             <Reveal variant="text" delay={90}>
               <p className="text-body text-wine">
                 Thoughtfully designed menus, seasonal ingredients, and memorable
-                experiences for weddings, private celebrations
+                experiences for weddings, private celebrations{" "}
                 <br className="hidden md:block" />
                 and corporate events.
               </p>
