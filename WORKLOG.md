@@ -4,6 +4,46 @@ Newest session first.
 
 ---
 
+# Session 2026-10-25 — "Premium" out of the page title, real favicon
+
+Committed and pushed.
+
+## 1. Page title and description
+
+"Premium" had only been removed from the hero (2026-07-28). The `<title>` and meta description still had
+it, so it showed in browser address-bar suggestions and Google results.
+
+- `<title>` → **"TÝN — Levantine Catering"**
+- Description now opens **"Catering crafted with…"**, matching the hero.
+
+Browsers keep the old title in history until the site is next visited; Google updates on its next crawl.
+
+## 2. Favicon — TÝN logo replaces the Next.js triangle
+
+`app/favicon.ico` was still the create-next-app default. All icons are now generated from
+`public/images/logo-tyn.svg`: cream (`#fffef7`) wordmark on a wine (`#7e283e`) tile.
+
+| File | Size | Used by |
+|---|---|---|
+| `app/favicon.ico` | 16 / 32 / 48 | browser tabs, bookmarks |
+| `app/icon.png` | 192 | Google results, Android, hi-DPI |
+| `app/apple-icon.png` | 180 | iPhone/iPad Safari, home screen |
+
+Next.js links all three by file convention — no code involved.
+
+- **Wine tile, not cream:** a cream tile vanished against a white tab bar. Cream-on-wine is already the
+  footer's pairing.
+- **Strokes thickened at small sizes only** (+0.6px at 16, +0.45 at 32, +0.3 at 48). The brush lines are
+  under a pixel wide at 16px and disappeared. 180 and 192 are the true logo weight.
+- **`apple-icon` is full-bleed and opaque** — iOS rounds the corners itself and renders transparency black.
+- Rendered with `sharp` (installed with Next). The script was not committed; to redo, centre the logo's
+  4 paths on the tile with 5% side padding (10% for `apple-icon`) and an 18% corner radius.
+
+Verified: build lists the icon routes, `<head>` links them (48x48, 192x192, 180x180), and `next start`
+serves each byte-identical to its file.
+
+---
+
 # Session 2026-07-28 — client tweaks + contact form goes live
 
 Everything below is **committed and pushed** (`8c2e7bc`, `1343a47`). One external dependency is
@@ -36,7 +76,7 @@ Third revision of these numbers (see the 2026-07-20 session). The token comment 
 
 The same sentence is still duplicated verbatim in the SEO metadata (`layout.tsx:19`), and the
 `<title>` still reads "TÝN — Premium Levantine Catering". Both left alone deliberately — neither
-is visible on the page. **Flagged to the user, no decision yet.**
+is visible on the page. ~~Flagged to the user, no decision yet.~~ **Removed from both 2026-10-25.**
 
 ## 3. Mobile line breaks — a JSX bug, not CSS
 

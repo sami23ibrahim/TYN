@@ -14,9 +14,9 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "TÝN — Premium Levantine Catering",
+  title: "TÝN — Levantine Catering",
   description:
-    "Premium catering crafted with a touch of Middle Eastern heritage. Thoughtfully designed menus, seasonal ingredients, and memorable experiences for weddings, private celebrations and corporate events.",
+    "Catering crafted with a touch of Middle Eastern heritage. Thoughtfully designed menus, seasonal ingredients, and memorable experiences for weddings, private celebrations and corporate events.",
 };
 
 export default function RootLayout({
